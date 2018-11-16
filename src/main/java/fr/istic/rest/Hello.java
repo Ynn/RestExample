@@ -14,14 +14,13 @@ public class Hello
 
     @XmlRootElement
     public static class Message{
-    	@XmlElement(name = "test")
         public String name;
         public String greetings;
     }
 
     @Path("/{name}")
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     public Message getDescription(@PathParam("name") String name)
     {
         Message m = new Message();

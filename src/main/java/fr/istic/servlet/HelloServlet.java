@@ -19,7 +19,7 @@ public class HelloServlet extends HttpServlet {
     //TODO : Adapter l'URL en fonction de votre resource :
     public static final String URL = "http://localhost:8080/";
 
-    @XmlRootElement
+    @XmlRootElement(name="message")
     public static class SomeMessage{
         public String name;
         public String greetings;
@@ -28,12 +28,15 @@ public class HelloServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+      //Ceci n'est utile que pour JAXB 2.3.1 et disparaitra plus tard :
+      System.setProperty("com.sun.xml.bind.v2.bytecode.ClassTailor.noOptimize", "true");
+
         PrintWriter out = resp.getWriter();
         resp.setContentType("text/plain");
         try{
             Client client = ClientBuilder.newClient();
-            String name = "Toto";
-            SomeMessage serverResponse = client.target(URL).path("RestExample").path("rest").path("hello").path(name).request(MediaType.APPLICATION_JSON_TYPE).get(SomeMessage.class);
+            String name = "Toto";            
+            SomeMessage serverResponse = client.target(URL).path("RestExample").path("rest").path("hello").path(name).request(MediaType.APPLICATION_XML_TYPE).get(SomeMessage.class);
             out.println(serverResponse.greetings + " "+ serverResponse.name);
 
         }catch(Exception e){
@@ -41,5 +44,4 @@ public class HelloServlet extends HttpServlet {
         }
 
     }
-
 }
